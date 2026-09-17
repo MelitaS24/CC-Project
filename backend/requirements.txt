@@ -1,0 +1,7 @@
+Flask
+Flask-SQLAlchemy
+Flask-Login
+PyMySQL
+python-dotenv
+boto3
+Werkzeug
