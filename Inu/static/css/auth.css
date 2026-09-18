@@ -1,0 +1,272 @@
+/* ==========================================================================
+   auth.css — Modern Editorial Authentication Forms (Login & Sign Up)
+   Centered Layout, Themed Warm Gold & Forest Green Accents
+   ========================================================================== */
+
+/* Page Wrapper — Centers the Card Perfectly on the Screen */
+.auth-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 160px);
+  padding: 3rem 1.25rem;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--bg-page);
+}
+
+/* Main Card */
+.auth-card {
+  width: 100%;
+  max-width: 460px;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--gold);
+  box-shadow: 0 24px 50px -10px rgba(36, 72, 63, 0.16), 0 0 0 1px rgba(196, 154, 74, 0.1);
+  padding: 2.5rem 2.25rem;
+  position: relative;
+  box-sizing: border-box;
+  animation: authCardEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes authCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Card Header */
+.auth-card__header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.auth-card__icon-badge {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(196, 154, 74, 0.16), rgba(36, 72, 63, 0.08));
+  border: 1.5px solid rgba(196, 154, 74, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.65rem;
+  color: var(--forest);
+  margin: 0 auto 1.15rem;
+  box-shadow: 0 6px 16px -2px rgba(196, 154, 74, 0.2);
+}
+
+.auth-card__title {
+  font-family: var(--font-serif);
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--forest);
+  margin: 0 0 0.45rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.auth-card__subtitle {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Form Groups & Labels */
+.auth-form .form-group {
+  margin-bottom: 1.35rem;
+}
+
+.form-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.45rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--forest);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.45rem;
+}
+
+.form-label-row .form-label {
+  margin-bottom: 0;
+}
+
+.auth-link-subtle {
+  font-size: 0.8rem;
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.18s ease;
+}
+
+.auth-link-subtle:hover {
+  color: var(--forest);
+  text-decoration: underline;
+}
+
+/* Form Input Wrapper & Embedded Icons */
+.form-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.form-input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gold);
+  font-size: 1.15rem;
+  pointer-events: none;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-input-wrapper .form-control {
+  width: 100%;
+  padding: 0.78rem 2.75rem 0.78rem 2.75rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  background: #FAF8F5;
+  font-size: 0.92rem;
+  color: var(--charcoal);
+  font-family: inherit;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.form-input-wrapper .form-control::placeholder {
+  color: #B4ACA0;
+}
+
+.form-input-wrapper .form-control:focus {
+  border-color: var(--forest);
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(36, 72, 63, 0.12);
+}
+
+/* Password Toggle Button */
+.password-toggle-btn {
+  position: absolute;
+  right: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  transition: color 0.18s ease;
+  z-index: 2;
+}
+
+.password-toggle-btn:hover {
+  color: var(--forest);
+}
+
+/* Checkbox Styling */
+.form-group-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  margin: 1.25rem 0 1.5rem;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--charcoal);
+  cursor: pointer;
+}
+
+.form-group-checkbox input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  margin-top: 0.1rem;
+  accent-color: var(--forest);
+  cursor: pointer;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.form-group-checkbox label {
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Submit Button */
+.btn-block {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.5rem;
+  font-size: 0.96rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+}
+
+/* Card Footer */
+.auth-card__footer {
+  text-align: center;
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.auth-card__footer p {
+  margin: 0;
+}
+
+.auth-card__footer .auth-link {
+  font-weight: 700;
+  color: var(--forest);
+  text-decoration: none;
+  margin-left: 0.25rem;
+  transition: color 0.18s ease;
+}
+
+.auth-card__footer .auth-link:hover {
+  color: var(--gold);
+  text-decoration: underline;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 480px) {
+  .auth-wrapper {
+    padding: 2rem 1rem;
+    min-height: calc(100vh - 130px);
+  }
+
+  .auth-card {
+    padding: 2rem 1.4rem;
+    border-radius: var(--radius-md);
+  }
+
+  .auth-card__title {
+    font-size: 1.55rem;
+  }
+}
