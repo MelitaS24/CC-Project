@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from config import Config
 from extensions import db, login_manager
 from routes.admin import admin
@@ -34,8 +34,7 @@ app.register_blueprint(admin)
 
 @app.route("/")
 def home():
-    return "Online Library Backend is Running!"
-
+    return render_template("books/index.html") 
 
 if __name__ == "__main__":
     with app.app_context():
