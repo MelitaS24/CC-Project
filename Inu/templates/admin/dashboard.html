@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — Online Library</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}" />
+</head>
+<body>
+
+  <!-- ====================================================================
+       TOP NAVIGATION BAR
+       ==================================================================== -->
+  <header class="navbar">
+    <div class="navbar__container">
+      
+      <!-- Logo -->
+      <a href="{{ url_for('books.index') }}" class="navbar__logo">
+        <i class="ph ph-books"></i>
+        <span>Online <span class="brand-accent">Library</span></span>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="navbar__nav" id="navbar-nav">
+        <a href="{{ url_for('books.index') }}" class="nav-link"><i class="ph-bold ph-house"></i> Home</a>
+        <a href="{{ url_for('books.search') }}" class="nav-link"><i class="ph-bold ph-magnifying-glass"></i> Search</a>
+        <a href="{{ url_for('library.my_library') }}" class="nav-link"><i class="ph-bold ph-bookmarks"></i> My Library</a>
+        <a href="{{ url_for('admin.dashboard') }}" class="nav-link active"><i class="ph-bold ph-shield-check"></i> Admin</a>
+        
+        <!-- Auth / Profile Buttons -->
+        <div class="navbar__auth">
+          <a href="{{ url_for('auth.login') }}" class="btn btn-secondary">Log In</a>
+          <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Sign Up</a>
+        </div>
+      </nav>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button class="navbar__toggle" id="menu-toggle" aria-label="Toggle navigation">
+        <i class="ph-bold ph-list"></i>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- ====================================================================
+       MAIN ADMIN DASHBOARD
+       ==================================================================== -->
+  <main class="admin-container">
+    <div class="admin-card">
+      
+      <!-- Header Bar with Add Button -->
+      <div class="admin-header">
+        <div>
+          <h1 class="admin-title">Catalogue Management</h1>
+          <p class="admin-subtitle">Add, update, or remove titles from the library catalogue</p>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="openModal('add')">
+          <i class="ph-bold ph-plus"></i>
+          <span>Add New Book</span>
+        </button>
+      </div>
+
+      <!-- Quick Metrics -->
+      <div class="stats-row">
+        <div class="stat-card" style="border-top-color:var(--forest);">
+          <div class="stat-card__number" style="color:var(--forest);" id="stat-total">8</div>
+          <div class="stat-card__label">Total Books</div>
+        </div>
+        <div class="stat-card" style="border-top-color:var(--gold);">
+          <div class="stat-card__number" style="color:var(--gold);" id="stat-genres">7</div>
+          <div class="stat-card__label">Active Genres</div>
+        </div>
+        <div class="stat-card" style="border-top-color:var(--brown);">
+          <div class="stat-card__number" style="color:var(--brown);" id="stat-authors">7</div>
+          <div class="stat-card__label">Authors</div>
+        </div>
+      </div>
+
+      <!-- Books Table -->
+      <div class="admin-table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Cover</th>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Genre</th>
+              <th>Year</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-table-body">
+            <!-- Rendered by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ====================================================================
+       BASIC FOOTER
+       ==================================================================== -->
+  <footer class="footer">
+    <div class="footer__simple-container">
+      <div class="footer__simple-brand">
+        <i class="ph ph-books"></i>
+        <span>Online <span class="brand-accent">Library</span></span>
+      </div>
+      <p class="footer__copyright">&copy; 2026 Online Library. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Add / Edit Book Modal Dialog -->
+  <div class="modal-overlay" id="book-modal">
+    <div class="modal">
+      <div class="modal__header">
+        <h2 id="modal-title">Add New Book</h2>
+        <button class="modal__close" onclick="closeModal()" aria-label="Close modal">&times;</button>
+      </div>
+
+      <form id="book-form" onsubmit="handleFormSubmit(event)">
+        <input type="hidden" id="book-edit-id" />
+        <div class="modal__body">
+          <div class="form-group">
+            <label for="book-title">Book Title *</label>
+            <input type="text" id="book-title" class="form-control" placeholder="Enter book title" required />
+          </div>
+
+          <div class="form-group">
+            <label for="book-author">Author *</label>
+            <input type="text" id="book-author" class="form-control" placeholder="Author name" required />
+          </div>
+
+          <div class="form-group">
+            <label for="book-genre">Genre *</label>
+            <select id="book-genre" class="form-control" required>
+              <option value="">Select a genre</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="Mystery">Mystery</option>
+              <option value="Romance">Romance</option>
+              <option value="Sci-Fi">Sci-Fi</option>
+              <option value="Horror">Horror</option>
+              <option value="Classic">Classic</option>
+              <option value="Adventure">Adventure</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="book-desc">Description *</label>
+            <textarea id="book-desc" class="form-control" rows="4" placeholder="Write a brief synopsis..." required style="resize:vertical;"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="book-cover">Cover Image URL</label>
+            <input type="url" id="book-cover" class="form-control" placeholder="https://example.com/cover.jpg" />
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="form-group">
+              <label for="book-pages">Pages</label>
+              <input type="number" id="book-pages" class="form-control" placeholder="e.g. 320" min="1" />
+            </div>
+            <div class="form-group">
+              <label for="book-year">Year</label>
+              <input type="number" id="book-year" class="form-control" placeholder="e.g. 2024" min="1800" max="2030" />
+            </div>
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="modal-submit-btn">Save Book</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script>
+    let adminBooks = [
+      { id: 1, title: "The Enchanted Forest", author: "Elena Brightwood", genre: "Fantasy", pages: 342, year: 2023, cover: "https://picsum.photos/seed/book1/400/540", desc: "A young cartographer stumbles upon an ancient forest that changes shape with the rising moon." },
+      { id: 2, title: "Shadows on Baker Street", author: "Marcus Holloway", genre: "Mystery", pages: 288, year: 2022, cover: "https://picsum.photos/seed/book2/400/540", desc: "When an art dealer is found dead in his locked gallery, Detective Crane must untangle impossible alibis." },
+      { id: 3, title: "Letters to the Moon", author: "Sofia Reyes", genre: "Romance", pages: 256, year: 2024, cover: "https://picsum.photos/seed/book3/400/540", desc: "Two strangers exchange anonymous letters hidden in an old bookstore's forgotten poetry section." },
+      { id: 4, title: "The Last Starship", author: "James Orion", genre: "Sci-Fi", pages: 410, year: 2023, cover: "https://picsum.photos/seed/book4/400/540", desc: "Humanity's final colony ship drifts through deep space after navigation systems go silent." },
+      { id: 5, title: "Whispers in the Attic", author: "Catherine Noir", genre: "Horror", pages: 198, year: 2024, cover: "https://picsum.photos/seed/book5/400/540", desc: "Inheriting a Victorian mansion reveals sealed attic journals describing a presence that feeds on fear." },
+      { id: 6, title: "The Clockmaker's Daughter", author: "Alistair Thorne", genre: "Classic", pages: 320, year: 2021, cover: "https://picsum.photos/seed/book6/400/540", desc: "In 1890s London, a clockmaker crafts a device that pauses time — but every second must be repaid." },
+      { id: 7, title: "Beyond the Reef", author: "Kai Nakamura", genre: "Adventure", pages: 375, year: 2024, cover: "https://picsum.photos/seed/book7/400/540", desc: "Marine biologist Tara Voss joins an expedition to explore an uncharted deep-sea trench." },
+      { id: 8, title: "The Midnight Garden", author: "Elena Brightwood", genre: "Fantasy", pages: 290, year: 2023, cover: "https://picsum.photos/seed/book8/400/540", desc: "A botanist discovers that her late mother's garden blooms only at midnight with impossible blossoms." }
+    ];
+
+    const tableBody = document.getElementById('admin-table-body');
+    const overlay = document.getElementById('book-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const submitBtn = document.getElementById('modal-submit-btn');
+
+    function renderTable() {
+      tableBody.innerHTML = '';
+      adminBooks.forEach(b => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><img src="${b.cover}" alt="${b.title}" class="admin-cover" /></td>
+          <td><strong>${b.title}</strong></td>
+          <td>${b.author}</td>
+          <td><span class="badge badge-forest">${b.genre}</span></td>
+          <td>${b.year || '—'}</td>
+          <td>
+            <div class="admin-actions">
+              <button class="btn btn-outline btn-sm" onclick="openModal('edit', ${b.id})" title="Edit">
+                <i class="ph-bold ph-pencil-simple"></i>
+              </button>
+              <button class="btn btn-danger btn-sm" onclick="deleteBook(${b.id}, '${b.title}')" title="Delete">
+                <i class="ph-bold ph-trash"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        tableBody.appendChild(tr);
+      });
+
+      document.getElementById('stat-total').textContent = adminBooks.length;
+      document.getElementById('stat-genres').textContent = new Set(adminBooks.map(b => b.genre)).size;
+      document.getElementById('stat-authors').textContent = new Set(adminBooks.map(b => b.author)).size;
+    }
+
+    function openModal(mode, id) {
+      if (mode === 'edit') {
+        const b = adminBooks.find(item => item.id === id);
+        if (!b) return;
+        modalTitle.textContent = 'Edit Book Details';
+        submitBtn.textContent = 'Save Changes';
+        document.getElementById('book-edit-id').value = b.id;
+        document.getElementById('book-title').value = b.title;
+        document.getElementById('book-author').value = b.author;
+        document.getElementById('book-genre').value = b.genre;
+        document.getElementById('book-desc').value = b.desc;
+        document.getElementById('book-cover').value = b.cover;
+        document.getElementById('book-pages').value = b.pages || '';
+        document.getElementById('book-year').value = b.year || '';
+      } else {
+        modalTitle.textContent = 'Add New Book';
+        submitBtn.textContent = 'Add Book';
+        document.getElementById('book-edit-id').value = '';
+        document.getElementById('book-form').reset();
+      }
+      overlay.classList.add('active');
+    }
+
+    function closeModal() {
+      overlay.classList.remove('active');
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const editId = document.getElementById('book-edit-id').value;
+      const title = document.getElementById('book-title').value.trim();
+      const author = document.getElementById('book-author').value.trim();
+      const genre = document.getElementById('book-genre').value;
+      const desc = document.getElementById('book-desc').value.trim();
+      const cover = document.getElementById('book-cover').value.trim() || `https://picsum.photos/seed/book${Date.now()}/400/540`;
+      const pages = parseInt(document.getElementById('book-pages').value) || 0;
+      const year = parseInt(document.getElementById('book-year').value) || 2026;
+
+      if (editId) {
+        const index = adminBooks.findIndex(b => b.id === parseInt(editId));
+        if (index !== -1) {
+          adminBooks[index] = { ...adminBooks[index], title, author, genre, desc, cover, pages, year };
+        }
+      } else {
+        const newId = Math.max(...adminBooks.map(b => b.id), 0) + 1;
+        adminBooks.unshift({ id: newId, title, author, genre, desc, cover, pages, year });
+      }
+
+      closeModal();
+      renderTable();
+      window.showAppToast({
+        title: editId ? "Book Updated" : "Book Added",
+        message: `"${title}" has been saved to the catalogue.`,
+        icon: "ph-bold ph-check-circle"
+      });
+    }
+
+    function deleteBook(id, title) {
+      window.showAppDialog({
+        title: "Delete Book",
+        message: `Are you sure you want to delete "${title}" from the library catalogue? This action cannot be undone.`,
+        icon: "ph-bold ph-trash",
+        confirmText: "Delete Book",
+        cancelText: "Cancel",
+        onConfirm: () => {
+          adminBooks = adminBooks.filter(b => b.id !== id);
+          renderTable();
+          window.showAppToast({
+            title: "Book Removed",
+            message: `"${title}" was deleted.`,
+            icon: "ph-bold ph-trash"
+          });
+        }
+      });
+    }
+
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeModal();
+    });
+
+    document.addEventListener('DOMContentLoaded', renderTable);
+  </script>
+</body>
+</html>
