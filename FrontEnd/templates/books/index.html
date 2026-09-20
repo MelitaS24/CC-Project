@@ -29,21 +29,21 @@
     <div class="navbar__container">
       
       <!-- Logo -->
-      <a href="{{ url_for('books.index') }}" class="navbar__logo">
+      <a href="{{ url_for('home') }}" class="navbar__logo">
         <i class="ph ph-books"></i>
         <span>Online <span class="brand-accent">Library</span></span>
       </a>
 
       <!-- Navigation Links -->
       <nav class="navbar__nav" id="navbar-nav">
-        <a href="{{ url_for('books.index') }}" class="nav-link active"><i class="ph-bold ph-house"></i> Home</a>
-        <a href="{{ url_for('books.search') }}" class="nav-link"><i class="ph-bold ph-magnifying-glass"></i> Search</a>
-        <a href="{{ url_for('library.my_library') }}" class="nav-link"><i class="ph-bold ph-bookmarks"></i> My Library</a>
+        <a href="{{ url_for('home') }}" class="nav-link active"><i class="ph-bold ph-house"></i> Home</a>
+        <a href="{{ url_for('search_page') }}" class="nav-link"><i class="ph-bold ph-magnifying-glass"></i> Search</a>
+        <a href="{{ url_for('library_page') }}" class="nav-link"><i class="ph-bold ph-bookmarks"></i> My Library</a>
         
         <!-- Auth / Profile Buttons -->
         <div class="navbar__auth">
-          <a href="{{ url_for('auth.login') }}" class="btn btn-secondary">Log In</a>
-          <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Sign Up</a>
+          <a href="{{ url_for('login_page') }}" class="btn btn-secondary">Log In</a>
+          <a href="{{ url_for('register_page') }}" class="btn btn-primary">Sign Up</a>
         </div>
       </nav>
 
