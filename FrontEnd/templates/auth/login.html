@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log In — Online Library</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}" />
+</head>
+<body>
+
+  <!-- ====================================================================
+       TOP NAVIGATION BAR
+       ==================================================================== -->
+  <header class="navbar">
+    <div class="navbar__container">
+      
+      <!-- Logo -->
+      <a href="../books/index.html" class="navbar__logo">
+        <i class="ph ph-books"></i>
+        <span>Online <span class="brand-accent">Library</span></span>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="navbar__nav" id="navbar-nav">
+        <a href="../books/index.html" class="nav-link"><i class="ph-bold ph-house"></i> Home</a>
+        <a href="../books/search.html" class="nav-link"><i class="ph-bold ph-magnifying-glass"></i> Search</a>
+        <a href="../library/my_library.html" class="nav-link"><i class="ph-bold ph-bookmarks"></i> My Library</a>
+        
+        <!-- Auth / Profile Buttons -->
+        <div class="navbar__auth">
+          <a href="login.html" class="btn btn-secondary active">Log In</a>
+          <a href="register.html" class="btn btn-primary">Sign Up</a>
+        </div>
+      </nav>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button class="navbar__toggle" id="menu-toggle" aria-label="Toggle navigation">
+        <i class="ph-bold ph-list"></i>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- ====================================================================
+       MAIN AUTHENTICATION CONTENT
+       ==================================================================== -->
+  <main class="auth-wrapper">
+    <div class="auth-card">
+      
+      <div class="auth-card__header">
+        <div class="auth-card__icon-badge">
+          <i class="ph-bold ph-lock-key"></i>
+        </div>
+        <h1 class="auth-card__title">Welcome back</h1>
+        <p class="auth-card__subtitle">Enter your details to access your reading collection</p>
+      </div>
+
+      <form id="login-form" class="auth-form" onsubmit="handleLogin(event)">
+        
+        <!-- Email Field -->
+        <div class="form-group">
+          <label for="login-email" class="form-label">Email Address</label>
+          <div class="form-input-wrapper">
+            <i class="ph-bold ph-envelope form-input-icon"></i>
+            <input
+              type="email"
+              id="login-email"
+              class="form-control"
+              placeholder="you@example.com"
+              required
+              autocomplete="email"
+            />
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="form-group">
+          <div class="form-label-row">
+            <label for="login-password" class="form-label">Password</label>
+            <a href="#" class="auth-link-subtle" onclick="window.showAppToast({ title: 'Password Reset', message: 'Instructions sent to your email address.', icon: 'ph-bold ph-envelope' }); return false;">Forgot?</a>
+          </div>
+          <div class="form-input-wrapper">
+            <i class="ph-bold ph-lock form-input-icon"></i>
+            <input
+              type="password"
+              id="login-password"
+              class="form-control"
+              placeholder="••••••••"
+              required
+              autocomplete="current-password"
+            />
+            <button
+              type="button"
+              class="password-toggle-btn"
+              id="password-toggle"
+              aria-label="Toggle password visibility"
+              onclick="togglePasswordVisibility('login-password', this)"
+            >
+              <i class="ph-bold ph-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Remember Me Checkbox -->
+        <div class="form-group-checkbox">
+          <input type="checkbox" id="remember-me" />
+          <label for="remember-me">Remember me on this browser</label>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary btn-block">
+          <span>Log In</span>
+          <i class="ph-bold ph-arrow-right"></i>
+        </button>
+
+      </form>
+
+      <div class="auth-card__footer">
+        <p>Don't have an account? <a href="register.html" class="auth-link">Sign up</a></p>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ====================================================================
+       BASIC FOOTER
+       ==================================================================== -->
+  <footer class="footer">
+    <div class="footer__simple-container">
+      <div class="footer__simple-brand">
+        <i class="ph ph-books"></i>
+        <span>Online <span class="brand-accent">Library</span></span>
+      </div>
+      <p class="footer__copyright">&copy; 2026 Online Library. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../static/js/main.js"></script>
+  <script>
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const icon = btn.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'ph-bold ph-eye-slash';
+      } else {
+        input.type = 'password';
+        icon.className = 'ph-bold ph-eye';
+      }
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      window.showAppDialog({
+        title: "Welcome Back!",
+        message: `Successfully logged in as ${email}. Redirecting to your library catalog...`,
+        icon: "ph-bold ph-check-circle",
+        confirmText: "Continue",
+        onConfirm: () => {
+          window.location.href = '../books/index.html';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

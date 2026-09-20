@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Online Library — Discover &amp; Read Your Favourite Books</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/books.css') }}" />
+</head>
+<body>
+
+  <!-- ====================================================================
+       TOP NAVIGATION BAR
+       ==================================================================== -->
+  <header class="navbar">
+    <div class="navbar__container">
+      
+      <!-- Logo -->
+      <a href="{{ url_for('books.index') }}" class="navbar__logo">
+        <i class="ph ph-books"></i>
+        <span>Online <span class="brand-accent">Library</span></span>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="navbar__nav" id="navbar-nav">
+        <a href="{{ url_for('books.index') }}" class="nav-link active"><i class="ph-bold ph-house"></i> Home</a>
+        <a href="{{ url_for('books.search') }}" class="nav-link"><i class="ph-bold ph-magnifying-glass"></i> Search</a>
+        <a href="{{ url_for('library.my_library') }}" class="nav-link"><i class="ph-bold ph-bookmarks"></i> My Library</a>
+        
+        <!-- Auth / Profile Buttons -->
+        <div class="navbar__auth">
+          <a href="{{ url_for('auth.login') }}" class="btn btn-secondary">Log In</a>
+          <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Sign Up</a>
+        </div>
+      </nav>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button class="navbar__toggle" id="menu-toggle" aria-label="Toggle navigation">
+        <i class="ph-bold ph-list"></i>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- ====================================================================
+       MAIN DASHBOARD LAYOUT (2-Column Editorial Grid)
+       ==================================================================== -->
+  <main class="dashboard-main">
+    <div class="dashboard-grid">
+
+      <!-- Primary Column (Books Catalog) -->
+      <div class="dashboard-primary">
+
+        <!-- Genre Pill Filters -->
+        <section class="genre-filter-wrapper" data-purpose="category-filters">
+          <div class="genre-filters">
+            <button type="button" class="chip active" data-genre="all">All Genres</button>
+            <button type="button" class="chip" data-genre="Fantasy">Fantasy</button>
+            <button type="button" class="chip" data-genre="Mystery">Mystery</button>
+            <button type="button" class="chip" data-genre="Romance">Romance</button>
+            <button type="button" class="chip" data-genre="Sci-Fi">Sci-Fi</button>
+            <button type="button" class="chip" data-genre="Horror">Horror</button>
+            <button type="button" class="chip" data-genre="Classic">Classic</button>
+            <button type="button" class="chip" data-genre="Adventure">Adventure</button>
+          </div>
+        </section>
+
+        <!-- Books Grid Catalog -->
+        <section class="catalog-section" data-purpose="book-catalog">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Curated Library</h2>
+              <p class="section-subtitle">Discover handcrafted picks and bestsellers across genres</p>
+            </div>
+            <a href="search.html" class="section-link">
+              <span>View All Catalogue</span>
+              <i class="ph-bold ph-arrow-right"></i>
+            </a>
+          </div>
+
+          <div class="books-grid" id="books-container">
+
+            <!-- Book 1 -->
+            <article class="card book-card hover-glow" data-genre="Fantasy">
+              <div class="book-card__cover-wrapper">
+                <img src="https://picsum.photos/seed/book1/400/540" alt="The Enchanted Forest" class="book-card__cover" loading="lazy" />
+                <div class="book-card__meta-overlay">
+                  <span class="badge badge-forest" style="background:rgba(36,72,63,0.85);color:#FFF;">Fantasy</span>
+                  <span class="book-card__rating"><i class="ph-fill ph-star"></i> 4.8</span>
+                </div>
+              </div>
+              <div class="book-card__body">
+                <h3 class="book-card__title">The Enchanted Forest</h3>
+                <p class="book-card__author">Elena Brightwood</p>
+                <p class="book-card__desc">A young cartographer stumbles upon an ancient forest that changes shape with the rising moon...</p>
+                <div class="book-card__footer">
+                  <span class="book-card__status">Available</span>
+                  <div class="book-card__actions">
+                    <a href="details.html?id=1" class="btn btn-primary"><span>Read</span></a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Book 2 -->
+            <article class="card book-card hover-glow" data-genre="Mystery">
+              <div class="book-card__cover-wrapper">
+                <img src="https://picsum.photos/seed/book2/400/540" alt="Shadows on Baker Street" class="book-card__cover" loading="lazy" />
+                <div class="book-card__meta-overlay">
+                  <span class="badge badge-forest" style="background:rgba(36,72,63,0.85);color:#FFF;">Mystery</span>
+                  <span class="book-card__rating"><i class="ph-fill ph-star"></i> 4.6</span>
+                </div>
+              </div>
+              <div class="book-card__body">
+                <h3 class="book-card__title">Shadows on Baker Street</h3>
+                <p class="book-card__author">Marcus Holloway</p>
+                <p class="book-card__desc">When an art dealer is found dead in his locked gallery, Detective Crane must untangle impossible alibis...</p>
+                <div class="book-card__footer">
+                  <span class="book-card__status">Available</span>
+                  <div class="book-card__actions">
+                    <a href="details.html?id=2" class="btn btn-primary"><span>Read</span></a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Book 3 -->
+            <article class="card book-card hover-glow" data-genre="Romance">
+              <div class="book-card__cover-wrapper">
+                <img src="https://picsum.photos/seed/book3/400/540" alt="Letters to the Moon" class="book-card__cover" loading="lazy" />
+                <div class="book-card__meta-overlay">
+                  <span class="badge badge-forest" style="background:rgba(36,72,63,0.85);color:#FFF;">Romance</span>
+                  <span class="book-card__rating"><i class="ph-fill ph-star"></i> 4.9</span>
+                </div>
+              </div>
+              <div class="book-card__body">
+                <h3 class="book-card__title">Letters to the Moon</h3>
+                <p class="book-card__author">Sofia Reyes</p>
+                <p class="book-card__desc">Two strangers exchange anonymous letters hidden in an old bookstore's forgotten poetry section...</p>
+                <div class="book-card__footer">
+                  <span class="book-card__status">Available</span>
+                  <div class="book-card__actions">
+                    <a href="details.html?id=3" class="btn btn-primary"><span>Read</span></a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Book 4 -->
+            <article class="card book-card hover-glow" data-genre="Sci-Fi">
+              <div class="book-card__cover-wrapper">
+                <img src="https://picsum.photos/seed/book4/400/540" alt="The Last Starship" class="book-card__cover" loading="lazy" />
+                <div class="book-card__meta-overlay">
+                  <span class="badge badge-forest" style="background:rgba(36,72,63,0.85);color:#FFF;">Sci-Fi</span>
+                  <span class="book-card__rating"><i class="ph-fill ph-star"></i> 4.7</span>
+                </div>
+              </div>
+              <div class="book-card__body">
+                <h3 class="book-card__title">The Last Starship</h3>
+                <p class="book-card__author">James Orion</p>
+                <p class="book-card__desc">Humanity's final colony ship drifts through deep space after navigation systems go silent...</p>
+                <div class="book-card__footer">
+                  <span class="book-card__status">Available</span>
+                  <div class="book-card__actions">
+                    <a href="details.html?id=4" class="btn btn-primary"><span>Read</span></a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Book 5 -->
+            <article class="card book-card hover-glow" data-genre="Horror">
+              <div class="book-card__cover-wrapper">
+                <img src="https://picsum.photos/seed/book5/400/540" alt="Whispers in the Attic" class="book-card__cover" loading="lazy" />
+                <div class="book-card__meta-overlay">
+                  <span class="badge badge-forest" style="background:rgba(36,72,63,0.85);color:#FFF;">Horror</span>
+                  <span class="book-card__rating"><i class="ph-fill ph-star"></i> 4.5</span>
+                </div>
+              </div>
+              <div class="book-card__body">
+                <h3 class="book-card__title">Whispers in the Attic</h3>
+                <p class="book-card__author">Catherine Noir</p>
+                <p class="book-card__desc">Inheriting a Victorian mansion reveals sealed attic journals describing a presence that feeds on fear...</p>
+                <div class="book-card__footer">
+                  <span class="book-card__status">Available</span>
+                  <div class="book-card__actions">
+                    <a href="details.html?id=5" class="btn btn-primary"><span>Read</span></a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Book 6 -->
+            <article class="card book-card hover-glow" data-genre="Classic">
+              <div class="book-card__cover-wrapper">
+                <img src="https://picsum.photos/seed/book6/400/540" alt="The Clockmaker's Daughter" class="book-card__cover" loading="lazy" />
+                <div class="book-card__meta-overlay">
+                  <span class="badge badge-forest" style="background:rgba(36,72,63,0.85);color:#FFF;">Classic</span>
+                  <span class="book-card__rating"><i class="ph-fill ph-star"></i> 4.9</span>
+                </div>
+              </div>
+              <div class="book-card__body">
+                <h3 class="book-card__title">The Clockmaker's Daughter</h3>
+                <p class="book-card__author">Alistair Thorne</p>
+                <p class="book-card__desc">In 1890s London, a clockmaker crafts a device that pauses time — but every second must be repaid...</p>
+                <div class="book-card__footer">
+                  <span class="book-card__status">Available</span>
+                  <div class="book-card__actions">
+                    <a href="details.html?id=6" class="btn btn-primary"><span>Read</span></a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Book 7 -->
+            <article class="card book-card hover-glow" data-genre="Adventure">
+              <div class="book-card__cover-wrapper">
+                <img src="https://picsum.photos/seed/book7/400/540" alt="Beyond the Reef" class="book-card__cover" loading="lazy" />
+                <div class="book-card__meta-overlay">
+                  <span class="badge badge-forest" style="background:rgba(36,72,63,0.85);color:#FFF;">Adventure</span>
+                  <span class="book-card__rating"><i class="ph-fill ph-star"></i> 4.4</span>
+                </div>
+              </div>
+              <div class="book-card__body">
+                <h3 class="book-card__title">Beyond the Reef</h3>
+                <p class="book-card__author">Kai Nakamura</p>
+                <p class="book-card__desc">Marine biologist Tara Voss joins an expedition to explore an uncharted deep-sea trench...</p>
+                <div class="book-card__footer">
+                  <span class="book-card__status">Available</span>
+                  <div class="book-card__actions">
+                    <a href="details.html?id=7" class="btn btn-primary"><span>Read</span></a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Book 8 -->
+            <article class="card book-card hover-glow" data-genre="Fantasy">
+              <div class="book-card__cover-wrapper">
+                <img src="https://picsum.photos/seed/book8/400/540" alt="The Midnight Garden" class="book-card__cover" loading="lazy" />
+                <div class="book-card__meta-overlay">
+                  <span class="badge badge-forest" style="background:rgba(36,72,63,0.85);color:#FFF;">Fantasy</span>
+                  <span class="book-card__rating"><i class="ph-fill ph-star"></i> 4.9</span>
+                </div>
+              </div>
+              <div class="book-card__body">
+                <h3 class="book-card__title">The Midnight Garden</h3>
+                <p class="book-card__author">Elena Brightwood</p>
+                <p class="book-card__desc">A botanist discovers that her late mother's garden blooms only at midnight with impossible blossoms...</p>
+                <div class="book-card__footer">
+                  <span class="book-card__status">Available</span>
+                  <div class="book-card__actions">
+                    <a href="details.html?id=8" class="btn btn-primary"><span>Read</span></a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Secondary Column (Popular Books & Authors) -->
+      <aside class="dashboard-sidebar" data-purpose="secondary-sidebar">
+
+        <!-- Popular Books Section -->
+        <section data-purpose="popular-books">
+          <div class="section-header">
+            <h3 style="font-size:1.05rem;">Popular books</h3>
+            <a href="search.html" class="section-link" style="font-size:0.75rem;">Show all</a>
+          </div>
+
+          <div class="popular-books-grid">
+            <div class="popular-book-item" style="background:#DD4A2A;" title="Subtle Art" onclick="window.location.href='search.html'">
+              <p>Subtle Art</p>
+            </div>
+            <div class="popular-book-item" style="background:#FFFDF8;border:1px solid var(--border);color:var(--charcoal);" title="Power of Mind" onclick="window.location.href='search.html'">
+              <p>Power of Mind</p>
+            </div>
+            <div class="popular-book-item" style="background:#EADCC7;color:var(--brown);" title="Girl to Remember" onclick="window.location.href='search.html'">
+              <p>Girl to Remember</p>
+            </div>
+            <div class="popular-book-item" style="background:var(--forest);color:var(--gold);" title="Sherlock Holmes" onclick="window.location.href='search.html'">
+              <p>Sherlock Holmes</p>
+            </div>
+            <div class="popular-book-item" style="background:#1A3832;color:#A7F3D0;" title="Orient Express" onclick="window.location.href='search.html'">
+              <p>Orient Express</p>
+            </div>
+            <div class="popular-book-item" style="background:var(--gold);color:#FFFFFF;" title="Hope & Chaos" onclick="window.location.href='search.html'">
+              <p>Hope &amp; Chaos</p>
+            </div>
+            <div class="popular-book-item" style="background:var(--brown);color:#FFFFFF;" title="Attitude Is All" onclick="window.location.href='search.html'">
+              <p>Attitude Is All</p>
+            </div>
+            <div class="popular-book-item" style="background:#3C3633;color:#FEF3C7;" title="Bullet Memory" onclick="window.location.href='search.html'">
+              <p>Bullet Memory</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Writers & Authors Section -->
+        <section data-purpose="writers-and-authors">
+          <div class="section-header">
+            <h3 style="font-size:1.05rem;">Writers and Authors</h3>
+            <a href="search.html" class="section-link" style="font-size:0.75rem;">Show all</a>
+          </div>
+
+          <div class="authors-list">
+            <div class="author-item">
+              <div class="author-avatar-group">
+                <div class="author-avatar" style="background:var(--forest);color:var(--gold);">EB</div>
+                <div>
+                  <h4 class="author-name">Elena Brightwood</h4>
+                  <p class="author-title">Fantasy &amp; Magical Realism</p>
+                </div>
+              </div>
+              <div class="author-count">
+                <strong>48</strong>
+                <p>Books</p>
+              </div>
+            </div>
+
+            <div class="author-item">
+              <div class="author-avatar-group">
+                <div class="author-avatar" style="background:var(--brown);color:#FFF;">MH</div>
+                <div>
+                  <h4 class="author-name">Marcus Holloway</h4>
+                  <p class="author-title">Mystery &amp; Thrillers</p>
+                </div>
+              </div>
+              <div class="author-count">
+                <strong>32</strong>
+                <p>Books</p>
+              </div>
+            </div>
+
+            <div class="author-item">
+              <div class="author-avatar-group">
+                <div class="author-avatar" style="background:var(--gold);color:var(--forest);">SR</div>
+                <div>
+                  <h4 class="author-name">Sofia Reyes</h4>
+                  <p class="author-title">Contemporary Romance</p>
+                </div>
+              </div>
+              <div class="author-count">
+                <strong>25</strong>
+                <p>Books</p>
+              </div>
+            </div>
+
+            <div class="author-item">
+              <div class="author-avatar-group">
+                <div class="author-avatar" style="background:#3C3633;color:var(--gold);">AT</div>
+                <div>
+                  <h4 class="author-name">Alistair Thorne</h4>
+                  <p class="author-title">Historical &amp; Classics</p>
+                </div>
+              </div>
+              <div class="author-count">
+                <strong>64</strong>
+                <p>Books</p>
+              </div>
+            </div>
+
+            <div class="author-item">
+              <div class="author-avatar-group">
+                <div class="author-avatar" style="background:#5B7065;color:#FFF;">HM</div>
+                <div>
+                  <h4 class="author-name">Haruki Murakami</h4>
+                  <p class="author-title">Philosopher &amp; Author</p>
+                </div>
+              </div>
+              <div class="author-count">
+                <strong>110</strong>
+                <p>Books</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- ====================================================================
+       BASIC FOOTER
+       ==================================================================== -->
+  <footer class="footer">
+    <div class="footer__simple-container">
+      <div class="footer__simple-brand">
+        <i class="ph ph-books"></i>
+        <span>Online <span class="brand-accent">Library</span></span>
+      </div>
+      <p class="footer__copyright">&copy; 2026 Online Library. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../static/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const chips = document.querySelectorAll('.genre-filters .chip');
+      const cards = document.querySelectorAll('.book-card[data-genre]');
+
+      chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          chips.forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+
+          const genre = chip.dataset.genre;
+          cards.forEach(card => {
+            if (genre === 'all' || card.dataset.genre === genre) {
+              card.style.display = '';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

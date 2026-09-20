@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="refresh" content="0; url=books/index.html" />
+  <title>Redirecting to Online Library...</title>
+
+  <!-- Instant Client Redirect -->
+  <script>
+    window.location.replace("books/index.html");
+  </script>
+
+  <!-- Google Fonts & Stylesheet -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/books.css') }}" />
+</head>
+<body style="background-color: var(--bg-page); min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; font-family: var(--font-sans);">
+  
+  <div style="text-align: center; padding: 2rem; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border); border-top: 4px solid var(--gold); box-shadow: var(--shadow-md); max-width: 400px; width: 90%;">
+    <div style="font-size: 2.2rem; color: var(--forest); margin-bottom: 0.75rem;">
+      <i class="ph ph-books"></i>
+    </div>
+    <h2 style="font-family: var(--font-serif); font-size: 1.35rem; color: var(--forest); margin: 0 0 0.5rem;">Online Library</h2>
+    <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0 0 1.25rem;">Redirecting to the library catalogue...</p>
+    <a href="{{ url_for('books.index') }}" class="btn btn-primary" style="display: inline-block;">Click here if not redirected</a>
+  </div>
+
+</body>
+</html>
