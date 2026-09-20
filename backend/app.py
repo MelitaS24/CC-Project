@@ -34,7 +34,31 @@ app.register_blueprint(admin)
 
 @app.route("/")
 def home():
-    return render_template("books/index.html") 
+    return render_template("books/index.html")
+
+@app.route("/search")
+def search_page():
+    return render_template("books/search.html")
+
+@app.route("/details")
+def details_page():
+    return render_template("books/details.html")
+
+@app.route("/my-library")
+def my_library_page():
+    return render_template("library/my_library.html")
+
+@app.route("/admin")
+def admin_page():
+    return render_template("admin/dashboard.html")
+
+@app.route("/login", methods=["GET"])
+def login_page():
+    return render_template("auth/login.html")
+
+@app.route("/register", methods=["GET"])
+def register_page():
+    return render_template("auth/register.html")
 
 if __name__ == "__main__":
     with app.app_context():
