@@ -29,22 +29,29 @@
     <div class="navbar__container">
       
       <!-- Logo -->
-      <a href="../books/index.html" class="navbar__logo">
+      <a href="/books" class="navbar__logo">
         <i class="ph ph-books"></i>
         <span>Online <span class="brand-accent">Library</span></span>
       </a>
 
       <!-- Navigation Links -->
       <nav class="navbar__nav" id="navbar-nav">
-        <a href="../books/index.html" class="nav-link"><i class="ph-bold ph-house"></i> Home</a>
-        <a href="../books/search.html" class="nav-link"><i class="ph-bold ph-magnifying-glass"></i> Search</a>
-        <a href="../library/my_library.html" class="nav-link"><i class="ph-bold ph-bookmarks"></i> My Library</a>
-        
-        <!-- Auth / Profile Buttons -->
-        <div class="navbar__auth">
-          <a href="login.html" class="btn btn-secondary active">Log In</a>
-          <a href="register.html" class="btn btn-primary">Sign Up</a>
-        </div>
+    <a href="/books" class="nav-link">
+  <i class="ph-bold ph-house"></i> Home
+</a>
+
+<a href="/books" class="nav-link">
+  <i class="ph-bold ph-magnifying-glass"></i> Books
+</a>
+
+<a href="/library" class="nav-link">
+  <i class="ph-bold ph-bookmarks"></i> My Library
+</a>
+
+<div class="navbar__auth">
+  <a href="/login" class="btn btn-outline active">Log In</a> <a href="/register" class="btn btn-primary">Sign Up</a>
+  <a href="/register" class="btn btn-primary">Sign Up</a>
+</div>
       </nav>
 
       <!-- Mobile Menu Toggle Button -->
@@ -130,7 +137,7 @@
       </form>
 
       <div class="auth-card__footer">
-        <p>Don't have an account? <a href="register.html" class="auth-link">Sign up</a></p>
+        <p>Don't have an account? <a href="/register" class="auth-link">Sign up</a></p>
       </div>
 
     </div>
@@ -150,33 +157,69 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="../../static/js/main.js"></script>
-  <script>
-    function togglePasswordVisibility(inputId, btn) {
-      const input = document.getElementById(inputId);
-      const icon = btn.querySelector('i');
-      if (input.type === 'password') {
-        input.type = 'text';
-        icon.className = 'ph-bold ph-eye-slash';
-      } else {
-        input.type = 'password';
-        icon.className = 'ph-bold ph-eye';
-      }
-    }
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+   <script>
+function togglePasswordVisibility(inputId, btn) {
+  const input = document.getElementById(inputId);
+  const icon = btn.querySelector('i');
 
-    function handleLogin(e) {
-      e.preventDefault();
-      const email = document.getElementById('login-email').value;
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.className = 'ph-bold ph-eye-slash';
+  } else {
+    input.type = 'password';
+    icon.className = 'ph-bold ph-eye';
+  }
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+
+  const email = document.getElementById("login-email").value;
+  const password = document.getElementById("login-password").value;
+
+  try {
+    const res = await fetch("/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        password
+      })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
       window.showAppDialog({
         title: "Welcome Back!",
-        message: `Successfully logged in as ${email}. Redirecting to your library catalog...`,
+        message: data.message,
         icon: "ph-bold ph-check-circle",
         confirmText: "Continue",
         onConfirm: () => {
-          window.location.href = '../books/index.html';
+          window.location.href = "/books";
         }
       });
+    } else {
+      window.showAppDialog({
+        title: "Login Failed",
+        message: data.message,
+        icon: "ph-bold ph-warning-circle",
+        confirmText: "Try Again"
+      });
     }
-  </script>
+
+  } catch (err) {
+    window.showAppDialog({
+      title: "Server Error",
+      message: "Unable to connect to the server.",
+      icon: "ph-bold ph-wifi-slash",
+      confirmText: "OK"
+    });
+  }
+}
+</script>
 </body>
 </html>
