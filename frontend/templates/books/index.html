@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Online Library — Discover &amp; Read Your Favourite Books</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../static/css/style.css" />
+  <link rel="stylesheet" href="../../static/css/books.css" />
+</head>
+<body>
+
+  <!-- ====================================================================
+       TOP NAVIGATION BAR
+       ==================================================================== -->
+  <header class="navbar">
+    <div class="navbar__container">
+      
+      <!-- Logo -->
+      <a href="index.html" class="navbar__logo">
+        <i class="ph ph-books"></i>
+        <span>Online <span class="brand-accent">Library</span></span>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="navbar__nav" id="navbar-nav">
+        <a href="index.html" class="nav-link active"><i class="ph-bold ph-house"></i> Home</a>
+        <a href="search.html" class="nav-link"><i class="ph-bold ph-magnifying-glass"></i> Search</a>
+        <a href="../library/my_library.html" class="nav-link"><i class="ph-bold ph-bookmarks"></i> My Library</a>
+        
+        <!-- Auth / Profile Buttons -->
+        <div class="navbar__auth">
+          <a href="../auth/login.html" class="btn btn-secondary">Log In</a>
+          <a href="../auth/register.html" class="btn btn-primary">Sign Up</a>
+        </div>
+      </nav>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button class="navbar__toggle" id="menu-toggle" aria-label="Toggle navigation">
+        <i class="ph-bold ph-list"></i>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- ====================================================================
+       MAIN DASHBOARD LAYOUT (2-Column Editorial Grid)
+       ==================================================================== -->
+  <main class="dashboard-main">
+    <div class="dashboard-grid">
+
+      <!-- Primary Column (Books Catalog) -->
+      <div class="dashboard-primary">
+
+        <!-- Genre Pill Filters -->
+        <section class="genre-filter-wrapper" data-purpose="category-filters">
+          <div class="genre-filters">
+            <button type="button" class="chip active" data-genre="all">All Genres</button>
+            <button type="button" class="chip" data-genre="Fantasy">Fantasy</button>
+            <button type="button" class="chip" data-genre="Mystery">Mystery</button>
+            <button type="button" class="chip" data-genre="Romance">Romance</button>
+            <button type="button" class="chip" data-genre="Sci-Fi">Sci-Fi</button>
+            <button type="button" class="chip" data-genre="Horror">Horror</button>
+            <button type="button" class="chip" data-genre="Classic">Classic</button>
+            <button type="button" class="chip" data-genre="Adventure">Adventure</button>
+          </div>
+        </section>
+
+        <!-- Books Grid Catalog -->
+        <section class="catalog-section" data-purpose="book-catalog">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Curated Library</h2>
+              <p class="section-subtitle">Discover handcrafted picks and bestsellers across genres</p>
+            </div>
+            <a href="search.html" class="section-link">
+              <span>View All Catalogue</span>
+              <i class="ph-bold ph-arrow-right"></i>
+            </a>
+          </div>
+
+          <div class="books-grid" id="books-container">
+
+            
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Secondary Column (Popular Books & Authors) -->
+      <aside class="dashboard-sidebar" data-purpose="secondary-sidebar">
+
+        <!-- Popular Books Section -->
+        <section data-purpose="popular-books">
+          <div class="section-header">
+            <h3 style="font-size:1.05rem;">Popular books</h3>
+            <a href="search.html" class="section-link" style="font-size:0.75rem;">Show all</a>
+          </div>
+
+          <div class="popular-books-grid">
+            <div class="popular-book-item" style="background:#DD4A2A;" title="Subtle Art" onclick="window.location.href='search.html'">
+              <p>Subtle Art</p>
+            </div>
+            <div class="popular-book-item" style="background:#FFFDF8;border:1px solid var(--border);color:var(--charcoal);" title="Power of Mind" onclick="window.location.href='search.html'">
+              <p>Power of Mind</p>
+            </div>
+            <div class="popular-book-item" style="background:#EADCC7;color:var(--brown);" title="Girl to Remember" onclick="window.location.href='search.html'">
+              <p>Girl to Remember</p>
+            </div>
+            <div class="popular-book-item" style="background:var(--forest);color:var(--gold);" title="Sherlock Holmes" onclick="window.location.href='search.html'">
+              <p>Sherlock Holmes</p>
+            </div>
+            <div class="popular-book-item" style="background:#1A3832;color:#A7F3D0;" title="Orient Express" onclick="window.location.href='search.html'">
+              <p>Orient Express</p>
+            </div>
+            <div class="popular-book-item" style="background:var(--gold);color:#FFFFFF;" title="Hope & Chaos" onclick="window.location.href='search.html'">
+              <p>Hope &amp; Chaos</p>
+            </div>
+            <div class="popular-book-item" style="background:var(--brown);color:#FFFFFF;" title="Attitude Is All" onclick="window.location.href='search.html'">
+              <p>Attitude Is All</p>
+            </div>
+            <div class="popular-book-item" style="background:#3C3633;color:#FEF3C7;" title="Bullet Memory" onclick="window.location.href='search.html'">
+              <p>Bullet Memory</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Writers & Authors Section -->
+        <section data-purpose="writers-and-authors">
+          <div class="section-header">
+            <h3 style="font-size:1.05rem;">Writers and Authors</h3>
+            <a href="search.html" class="section-link" style="font-size:0.75rem;">Show all</a>
+          </div>
+
+          <div class="authors-list">
+            <div class="author-item">
+              <div class="author-avatar-group">
+                <div class="author-avatar" style="background:var(--forest);color:var(--gold);">EB</div>
+                <div>
+                  <h4 class="author-name">Elena Brightwood</h4>
+                  <p class="author-title">Fantasy &amp; Magical Realism</p>
+                </div>
+              </div>
+              <div class="author-count">
+                <strong>48</strong>
+                <p>Books</p>
+              </div>
+            </div>
+
+            <div class="author-item">
+              <div class="author-avatar-group">
+                <div class="author-avatar" style="background:var(--brown);color:#FFF;">MH</div>
+                <div>
+                  <h4 class="author-name">Marcus Holloway</h4>
+                  <p class="author-title">Mystery &amp; Thrillers</p>
+                </div>
+              </div>
+              <div class="author-count">
+                <strong>32</strong>
+                <p>Books</p>
+              </div>
+            </div>
+
+            <div class="author-item">
+              <div class="author-avatar-group">
+                <div class="author-avatar" style="background:var(--gold);color:var(--forest);">SR</div>
+                <div>
+                  <h4 class="author-name">Sofia Reyes</h4>
+                  <p class="author-title">Contemporary Romance</p>
+                </div>
+              </div>
+              <div class="author-count">
+                <strong>25</strong>
+                <p>Books</p>
+              </div>
+            </div>
+
+            <div class="author-item">
+              <div class="author-avatar-group">
+                <div class="author-avatar" style="background:#3C3633;color:var(--gold);">AT</div>
+                <div>
+                  <h4 class="author-name">Alistair Thorne</h4>
+                  <p class="author-title">Historical &amp; Classics</p>
+                </div>
+              </div>
+              <div class="author-count">
+                <strong>64</strong>
+                <p>Books</p>
+              </div>
+            </div>
+
+            <div class="author-item">
+              <div class="author-avatar-group">
+                <div class="author-avatar" style="background:#5B7065;color:#FFF;">HM</div>
+                <div>
+                  <h4 class="author-name">Haruki Murakami</h4>
+                  <p class="author-title">Philosopher &amp; Author</p>
+                </div>
+              </div>
+              <div class="author-count">
+                <strong>110</strong>
+                <p>Books</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- ====================================================================
+       BASIC FOOTER
+       ==================================================================== -->
+  <footer class="footer">
+    <div class="footer__simple-container">
+      <div class="footer__simple-brand">
+        <i class="ph ph-books"></i>
+        <span>Online <span class="brand-accent">Library</span></span>
+      </div>
+      <p class="footer__copyright">&copy; 2026 Online Library. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../static/js/main.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    loadBooks();
+
+    const chips = document.querySelectorAll('.genre-filters .chip');
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+
+        const genre = chip.dataset.genre;
+
+        document.querySelectorAll('.book-card').forEach(card => {
+          if (genre === 'all' || card.dataset.genre === genre) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  });
+
+  async function loadBooks() {
+    const container = document.getElementById('books-container');
+
+    try {
+      const response = await fetch('http://127.0.0.1:5001/books');
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to load books');
+      }
+
+      container.innerHTML = '';
+
+      if (!data.books || data.books.length === 0) {
+        container.innerHTML = `
+          <p style="grid-column: 1 / -1; text-align: center;">
+            No books available.
+          </p>
+        `;
+        return;
+      }
+
+      data.books.forEach(book => {
+        const card = document.createElement('article');
+
+        card.className = 'card book-card hover-glow';
+        card.dataset.genre = book.genre;
+
+        card.innerHTML = `
+          <div class="book-card__cover-wrapper">
+
+            <img
+              src="${book.cover_url || 'https://picsum.photos/seed/book' + book.id + '/400/540'}"
+              alt="${book.title}"
+              class="book-card__cover"
+              loading="lazy"
+            />
+
+            <div class="book-card__meta-overlay">
+              <span
+                class="badge badge-forest"
+                style="background:rgba(36,72,63,0.85);color:#FFF;"
+              >
+                ${book.genre}
+              </span>
+            </div>
+
+          </div>
+
+          <div class="book-card__body">
+
+            <h3 class="book-card__title">
+              ${book.title}
+            </h3>
+
+            <p class="book-card__author">
+              ${book.author}
+            </p>
+
+            <p class="book-card__desc">
+              ${book.description || 'No description available.'}
+            </p>
+
+            <div class="book-card__footer">
+
+              <span class="book-card__status">
+                Available
+              </span>
+
+              <div class="book-card__actions">
+
+                <a
+                  href="details.html?id=${book.id}"
+                  class="btn btn-primary"
+                >
+                  <span>Read</span>
+                </a>
+
+              </div>
+
+            </div>
+
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+    } catch (error) {
+
+      console.error('Load books error:', error);
+
+      container.innerHTML = `
+        <p style="grid-column: 1 / -1; text-align: center;">
+          Unable to load books from the backend.
+        </p>
+      `;
+    }
+  }
+</script>
+</body>
+</html>

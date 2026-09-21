@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Library — Online Library</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap"
+    rel="stylesheet" />
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../static/css/style.css" />
+  <link rel="stylesheet" href="../../static/css/books.css" />
+</head>
+
+<body>
+
+  <!-- ====================================================================
+       TOP NAVIGATION BAR
+       ==================================================================== -->
+  <header class="navbar">
+    <div class="navbar__container">
+
+      <!-- Logo -->
+      <a href="../books/index.html" class="navbar__logo">
+        <i class="ph ph-books"></i>
+        <span>Online <span class="brand-accent">Library</span></span>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="navbar__nav" id="navbar-nav">
+        <a href="../books/index.html" class="nav-link"><i class="ph-bold ph-house"></i> Home</a>
+        <a href="../books/search.html" class="nav-link"><i class="ph-bold ph-magnifying-glass"></i> Search</a>
+        <a href="my_library.html" class="nav-link active"><i class="ph-bold ph-bookmarks"></i> My Library</a>
+
+        <!-- Auth / Profile Buttons -->
+        <div class="navbar__auth">
+          <a href="../auth/login.html" class="btn btn-secondary">Log In</a>
+          <a href="../auth/register.html" class="btn btn-primary">Sign Up</a>
+        </div>
+      </nav>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button class="navbar__toggle" id="menu-toggle" aria-label="Toggle navigation">
+        <i class="ph-bold ph-list"></i>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- ====================================================================
+       MY PERSONAL LIBRARY DASHBOARD
+       ==================================================================== -->
+  <main class="library-container">
+
+    <!-- User Profile Header -->
+    <header class="library-header">
+      <div class="library-header__avatar">
+        <i class="ph-bold ph-user"></i>
+      </div>
+      <div>
+        <h1 class="library-header__title">Jane's Personal Collection</h1>
+        <p class="library-header__subtitle">Keep track of currently reading titles, completed books, and future
+          wishlists</p>
+      </div>
+    </header>
+
+    <!-- Reading Progress Stats -->
+    <section class="library-stats-grid">
+      <div class="library-stat-card">
+        <div class="library-stat-number" style="color:var(--forest);">3</div>
+        <div class="library-stat-label">Currently Reading</div>
+      </div>
+      <div class="library-stat-card">
+        <div class="library-stat-number" style="color:var(--gold);">12</div>
+        <div class="library-stat-label">Completed </div>
+      </div>
+      <div class="library-stat-card">
+        <div class="library-stat-number" style="color:var(--brown);">5</div>
+        <div class="library-stat-label">Saved to Wishlist</div>
+      </div>
+    </section>
+
+    <!-- Shelf Tabs -->
+    <div class="shelf-tabs">
+      <button class="shelf-tab active" onclick="switchShelf('reading', this)">Currently Reading (3)</button>
+      <button class="shelf-tab" onclick="switchShelf('completed', this)">Completed (12)</button>
+      <button class="shelf-tab" onclick="switchShelf('saved', this)">Wishlist (5)</button>
+    </div>
+
+    <!-- Currently Reading Shelf Grid -->
+    <div id="shelf-reading" class="shelf-grid">
+    </div>
+
+    <!-- Wishlist Shelf Grid -->
+    <div id="shelf-saved" class="shelf-grid" style="display:none;">
+    </div>
+
+  </main>
+
+  <!-- ====================================================================
+       BASIC FOOTER
+       ==================================================================== -->
+  <footer class="footer">
+    <div class="footer__simple-container">
+      <div class="footer__simple-brand">
+        <i class="ph ph-books"></i>
+        <span>Online <span class="brand-accent">Library</span></span>
+      </div>
+      <p class="footer__copyright">&copy; 2026 Online Library. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../static/js/main.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    loadLibrary();
+  });
+
+  async function loadLibrary() {
+    const container = document.getElementById('shelf-reading');
+
+    try {
+      const response = await fetch(
+        'http://127.0.0.1:5001/library',
+        {
+          method: 'GET',
+          credentials: 'include'
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Unable to load library');
+      }
+
+      container.innerHTML = '';
+
+      if (!data.books || data.books.length === 0) {
+        container.innerHTML = `
+          <p style="grid-column:1/-1;text-align:center;">
+            Your library is empty.
+          </p>
+        `;
+        return;
+      }
+
+      data.books.forEach(book => {
+        const card = document.createElement('article');
+
+        card.className = 'card book-card hover-glow';
+
+        card.innerHTML = `
+          <div class="book-card__cover-wrapper">
+
+            <img
+              src="${book.cover_url || 'https://picsum.photos/seed/book' + book.id + '/400/540'}"
+              alt="${book.title}"
+              class="book-card__cover"
+              loading="lazy"
+            />
+
+            <div class="book-card__meta-overlay">
+              <span
+                class="badge badge-forest"
+                style="background:rgba(36,72,63,0.85);color:#FFF;"
+              >
+                ${book.genre}
+              </span>
+            </div>
+
+          </div>
+
+          <div class="book-card__body">
+
+            <h3 class="book-card__title">
+              ${book.title}
+            </h3>
+
+            <p class="book-card__author">
+              ${book.author}
+            </p>
+
+            <div class="book-card__footer">
+              <div style="display:flex; gap:10px; width:100%;">
+
+                <a
+                  href="../books/details.html?id=${book.id}"
+                  class="btn btn-primary"
+                  style="flex:1;"
+                >
+                  <span>Read</span>
+                </a>
+
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  style="flex:1;"
+                  onclick="removeFromLibrary(${book.id})"
+                >
+                  <span>Remove</span>
+                </button>
+
+              </div>
+            </div>
+
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+    } catch (error) {
+      console.error('Load library error:', error);
+
+      container.innerHTML = `
+        <p style="grid-column:1/-1;text-align:center;">
+          Unable to load your library.
+        </p>
+      `;
+    }
+  }
+
+  async function removeFromLibrary(bookId) {
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:5001/library/${bookId}`,
+      {
+        method: 'DELETE',
+        credentials: 'include'
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Unable to remove book');
+    }
+
+    window.showAppToast({
+      title: 'Removed from Library',
+      message: 'The book has been removed from your library.',
+      icon: 'ph-bold ph-check-circle'
+    });
+
+    // Reload the library
+    loadLibrary();
+
+  } catch (error) {
+    console.error('Remove library error:', error);
+
+    window.showAppToast({
+      title: 'Unable to Remove',
+      message: error.message || 'Something went wrong.',
+      icon: 'ph-bold ph-warning-circle'
+    });
+  }
+}
+
+  function switchShelf(shelfId, btn) {
+    document.querySelectorAll('.shelf-tab')
+      .forEach(b => b.classList.remove('active'));
+
+    btn.classList.add('active');
+
+    document.getElementById('shelf-reading').style.display =
+      shelfId === 'reading' ? 'grid' : 'none';
+
+    document.getElementById('shelf-completed').style.display =
+      shelfId === 'completed' ? 'grid' : 'none';
+
+    document.getElementById('shelf-saved').style.display =
+      shelfId === 'saved' ? 'grid' : 'none';
+  }
+</script>
+</body>
+
+</html>

@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — Online Library</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../static/css/style.css" />
+  <link rel="stylesheet" href="../../static/css/admin.css" />
+</head>
+<body>
+
+  <!-- ====================================================================
+       TOP NAVIGATION BAR
+       ==================================================================== -->
+  <header class="navbar">
+    <div class="navbar__container">
+      
+      <!-- Logo -->
+      <a href="../books/index.html" class="navbar__logo">
+        <i class="ph ph-books"></i>
+        <span>Online <span class="brand-accent">Library</span></span>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="navbar__nav" id="navbar-nav">
+        <a href="../books/index.html" class="nav-link"><i class="ph-bold ph-house"></i> Home</a>
+        <a href="../books/search.html" class="nav-link"><i class="ph-bold ph-magnifying-glass"></i> Search</a>
+        <a href="../library/my_library.html" class="nav-link"><i class="ph-bold ph-bookmarks"></i> My Library</a>
+        <a href="dashboard.html" class="nav-link active"><i class="ph-bold ph-shield-check"></i> Admin</a>
+        
+        <!-- Auth / Profile Buttons -->
+        <div class="navbar__auth">
+          <a href="../auth/login.html" class="btn btn-secondary">Log In</a>
+          <a href="../auth/register.html" class="btn btn-primary">Sign Up</a>
+        </div>
+      </nav>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button class="navbar__toggle" id="menu-toggle" aria-label="Toggle navigation">
+        <i class="ph-bold ph-list"></i>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- ====================================================================
+       MAIN ADMIN DASHBOARD
+       ==================================================================== -->
+  <main class="admin-container">
+    <div class="admin-card">
+      
+      <!-- Header Bar with Add Button -->
+      <div class="admin-header">
+        <div>
+          <h1 class="admin-title">Catalogue Management</h1>
+          <p class="admin-subtitle">Add, update, or remove titles from the library catalogue</p>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="openModal('add')">
+          <i class="ph-bold ph-plus"></i>
+          <span>Add New Book</span>
+        </button>
+      </div>
+
+      <!-- Quick Metrics -->
+      <div class="stats-row">
+        <div class="stat-card" style="border-top-color:var(--forest);">
+          <div class="stat-card__number" style="color:var(--forest);" id="stat-total">8</div>
+          <div class="stat-card__label">Total Books</div>
+        </div>
+        <div class="stat-card" style="border-top-color:var(--gold);">
+          <div class="stat-card__number" style="color:var(--gold);" id="stat-genres">7</div>
+          <div class="stat-card__label">Active Genres</div>
+        </div>
+        <div class="stat-card" style="border-top-color:var(--brown);">
+          <div class="stat-card__number" style="color:var(--brown);" id="stat-authors">7</div>
+          <div class="stat-card__label">Authors</div>
+        </div>
+      </div>
+
+      <!-- Books Table -->
+      <div class="admin-table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Cover</th>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Genre</th>
+              <th>Year</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-table-body">
+            <!-- Rendered by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ====================================================================
+       BASIC FOOTER
+       ==================================================================== -->
+  <footer class="footer">
+    <div class="footer__simple-container">
+      <div class="footer__simple-brand">
+        <i class="ph ph-books"></i>
+        <span>Online <span class="brand-accent">Library</span></span>
+      </div>
+      <p class="footer__copyright">&copy; 2026 Online Library. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Add / Edit Book Modal Dialog -->
+  <div class="modal-overlay" id="book-modal">
+    <div class="modal">
+      <div class="modal__header">
+        <h2 id="modal-title">Add New Book</h2>
+        <button class="modal__close" onclick="closeModal()" aria-label="Close modal">&times;</button>
+      </div>
+
+      <form id="book-form" onsubmit="handleFormSubmit(event)">
+        <input type="hidden" id="book-edit-id" />
+        <div class="modal__body">
+          <div class="form-group">
+            <label for="book-title">Book Title *</label>
+            <input type="text" id="book-title" class="form-control" placeholder="Enter book title" required />
+          </div>
+
+          <div class="form-group">
+            <label for="book-author">Author *</label>
+            <input type="text" id="book-author" class="form-control" placeholder="Author name" required />
+          </div>
+
+          <div class="form-group">
+            <label for="book-genre">Genre *</label>
+            <select id="book-genre" class="form-control" required>
+              <option value="">Select a genre</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="Mystery">Mystery</option>
+              <option value="Romance">Romance</option>
+              <option value="Sci-Fi">Sci-Fi</option>
+              <option value="Horror">Horror</option>
+              <option value="Classic">Classic</option>
+              <option value="Adventure">Adventure</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="book-desc">Description *</label>
+            <textarea id="book-desc" class="form-control" rows="4" placeholder="Write a brief synopsis..." required style="resize:vertical;"></textarea>
+          </div>
+
+          <div class="form-group">
+  <label for="book-cover">Cover Image URL</label>
+  <input
+    type="url"
+    id="book-cover"
+    class="form-control"
+    placeholder="https://example.com/cover.jpg"
+  />
+</div>
+
+<div class="form-group">
+  <label for="book-cover-file">Or Upload Cover Image</label>
+  <input
+    type="file"
+    id="book-cover-file"
+    class="form-control"
+    accept="image/jpeg,image/png,image/webp"
+  />
+</div>
+
+<div class="form-group">
+  <label for="book-pdf-file">Upload Book PDF</label>
+  <input
+    type="file"
+    id="book-pdf-file"
+    class="form-control"
+    accept="application/pdf"
+  />
+</div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="form-group">
+              <label for="book-pages">Pages</label>
+              <input type="number" id="book-pages" class="form-control" placeholder="e.g. 320" min="1" />
+            </div>
+            <div class="form-group">
+              <label for="book-year">Year</label>
+              <input type="number" id="book-year" class="form-control" placeholder="e.g. 2024" min="1800" max="2030" />
+            </div>
+          </div>
+        </div>
+
+        <div class="modal__footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="modal-submit-btn">Save Book</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../../static/js/main.js"></script>
+  <script>
+  let adminBooks = [];
+
+  const API_URL = "http://127.0.0.1:5001";
+
+  const tableBody = document.getElementById("admin-table-body");
+  const overlay = document.getElementById("book-modal");
+  const modalTitle = document.getElementById("modal-title");
+  const submitBtn = document.getElementById("modal-submit-btn");
+
+  // ------------------------------------------------------------
+  // LOAD BOOKS FROM BACKEND
+  // ------------------------------------------------------------
+  async function loadBooks() {
+    try {
+      const response = await fetch(`${API_URL}/books`);
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to load books");
+      }
+
+      adminBooks = data.books || [];
+
+      renderTable();
+
+    } catch (error) {
+      console.error("Load books error:", error);
+
+      window.showAppToast({
+        title: "Error",
+        message: "Could not load books from the server.",
+        icon: "ph-bold ph-warning-circle"
+      });
+    }
+  }
+
+
+  // ------------------------------------------------------------
+  // RENDER TABLE
+  // ------------------------------------------------------------
+  function renderTable() {
+    tableBody.innerHTML = "";
+
+    adminBooks.forEach((book) => {
+      const tr = document.createElement("tr");
+
+      tr.innerHTML = `
+        <td>
+          <img
+            src="${book.cover_url || "https://picsum.photos/seed/book/400/540"}"
+            alt="${book.title}"
+            class="admin-cover"
+          />
+        </td>
+
+        <td>
+          <strong>${book.title}</strong>
+        </td>
+
+        <td>${book.author}</td>
+
+        <td>
+          <span class="badge badge-forest">
+            ${book.genre}
+          </span>
+        </td>
+
+        <td>—</td>
+
+        <td>
+          <div class="admin-actions">
+
+            <button
+              class="btn btn-outline btn-sm"
+              onclick="openModal('edit', ${book.id})"
+              title="Edit"
+            >
+              <i class="ph-bold ph-pencil-simple"></i>
+            </button>
+
+            <button
+              class="btn btn-danger btn-sm"
+              onclick="deleteBook(${book.id}, '${escapeHtml(book.title)}')"
+              title="Delete"
+            >
+              <i class="ph-bold ph-trash"></i>
+            </button>
+
+          </div>
+        </td>
+      `;
+
+      tableBody.appendChild(tr);
+    });
+
+    // Statistics
+    document.getElementById("stat-total").textContent =
+      adminBooks.length;
+
+    document.getElementById("stat-genres").textContent =
+      new Set(adminBooks.map(book => book.genre)).size;
+
+    document.getElementById("stat-authors").textContent =
+      new Set(adminBooks.map(book => book.author)).size;
+  }
+
+
+  // ------------------------------------------------------------
+  // OPEN ADD / EDIT MODAL
+  // ------------------------------------------------------------
+  function openModal(mode, id) {
+
+    if (mode === "edit") {
+
+      const book = adminBooks.find(
+        item => item.id === id
+      );
+
+      if (!book) return;
+
+      modalTitle.textContent = "Edit Book Details";
+      submitBtn.textContent = "Save Changes";
+
+      document.getElementById("book-edit-id").value =
+        book.id;
+
+      document.getElementById("book-title").value =
+        book.title || "";
+
+      document.getElementById("book-author").value =
+        book.author || "";
+
+      document.getElementById("book-genre").value =
+        book.genre || "";
+
+      document.getElementById("book-desc").value =
+        book.description || "";
+
+      document.getElementById("book-cover").value =
+        book.cover_url || "";
+
+      // Backend currently does not store pages/year.
+      document.getElementById("book-pages").value = "";
+      document.getElementById("book-year").value = "";
+
+    } else {
+
+      modalTitle.textContent = "Add New Book";
+      submitBtn.textContent = "Add Book";
+
+      document.getElementById("book-edit-id").value = "";
+
+      document.getElementById("book-form").reset();
+    }
+
+    overlay.classList.add("active");
+  }
+
+
+  // ------------------------------------------------------------
+  // CLOSE MODAL
+  // ------------------------------------------------------------
+  function closeModal() {
+    overlay.classList.remove("active");
+  }
+
+
+  // ------------------------------------------------------------
+  // ADD / UPDATE BOOK
+  // ------------------------------------------------------------
+  async function uploadFile(file) {
+  const formData = new FormData();
+
+  formData.append("file", file);
+
+  const response = await fetch(
+    `${API_URL}/books/upload`,
+    {
+      method: "POST",
+      credentials: "include",
+      body: formData
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      data.message || "File upload failed"
+    );
+  }
+
+  return data.s3_key;
+}
+  async function handleFormSubmit(event) {
+
+    event.preventDefault();
+
+    const editId =
+      document.getElementById("book-edit-id").value;
+
+    const title =
+      document.getElementById("book-title").value.trim();
+
+    const author =
+      document.getElementById("book-author").value.trim();
+
+    const genre =
+      document.getElementById("book-genre").value;
+
+    const description =
+      document.getElementById("book-desc").value.trim();
+
+    const cover_url =
+      document.getElementById("book-cover").value.trim();
+
+
+    const coverFile =
+  document.getElementById("book-cover-file").files[0];
+
+const pdfFile =
+  document.getElementById("book-pdf-file").files[0];
+
+let coverKey = null;
+let pdfKey = null;
+
+try {
+
+  // Upload cover if selected
+  if (coverFile) {
+    coverKey = await uploadFile(coverFile);
+  }
+
+  // Upload PDF if selected
+  if (pdfFile) {
+    pdfKey = await uploadFile(pdfFile);
+  }
+
+} catch (uploadError) {
+
+  console.error(
+    "Upload error:",
+    uploadError
+  );
+
+  window.showAppToast({
+    title: "Upload Failed",
+    message: uploadError.message,
+    icon: "ph-bold ph-warning-circle"
+  });
+
+  return;
+}
+
+
+const bookData = {
+  title: title,
+  author: author,
+  genre: genre,
+  description: description,
+  cover_url: cover_url || null,
+  cover_key: coverKey,
+  pdf_key: pdfKey
+};
+
+
+    try {
+
+      let response;
+
+      // --------------------------------------------------------
+      // EDIT
+      // --------------------------------------------------------
+      if (editId) {
+
+        response = await fetch(
+          `${API_URL}/books/${editId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(bookData)
+          }
+        );
+
+      }
+
+      // --------------------------------------------------------
+      // ADD
+      // --------------------------------------------------------
+      else {
+
+        response = await fetch(
+          `${API_URL}/books`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(bookData)
+          }
+        );
+
+      }
+
+
+      const data = await response.json();
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          data.message || "Operation failed"
+        );
+
+      }
+
+
+      closeModal();
+
+      await loadBooks();
+
+
+      window.showAppToast({
+        title: editId
+          ? "Book Updated"
+          : "Book Added",
+
+        message: editId
+          ? `"${title}" has been updated.`
+          : `"${title}" has been added to the catalogue.`,
+
+        icon: "ph-bold ph-check-circle"
+      });
+
+
+    } catch (error) {
+
+      console.error(
+        "Save book error:",
+        error
+      );
+
+      window.showAppToast({
+        title: "Error",
+        message: error.message,
+        icon: "ph-bold ph-warning-circle"
+      });
+
+    }
+  }
+
+
+  // ------------------------------------------------------------
+  // DELETE BOOK
+  // ------------------------------------------------------------
+  function deleteBook(id, title) {
+
+    window.showAppDialog({
+
+      title: "Delete Book",
+
+      message:
+        `Are you sure you want to delete "${title}" from the library catalogue? This action cannot be undone.`,
+
+      icon: "ph-bold ph-trash",
+
+      confirmText: "Delete Book",
+
+      cancelText: "Cancel",
+
+      onConfirm: async () => {
+
+        try {
+
+          const response = await fetch(
+            `${API_URL}/books/${id}`,
+            {
+              method: "DELETE",
+              credentials: "include"
+            }
+          );
+
+
+          const data =
+            await response.json();
+
+
+          if (!response.ok) {
+
+            throw new Error(
+              data.message ||
+              "Failed to delete book"
+            );
+
+          }
+
+
+          await loadBooks();
+
+
+          window.showAppToast({
+
+            title: "Book Removed",
+
+            message:
+              `"${title}" was deleted.`,
+
+            icon:
+              "ph-bold ph-trash"
+
+          });
+
+
+        } catch (error) {
+
+          console.error(
+            "Delete book error:",
+            error
+          );
+
+          window.showAppToast({
+
+            title: "Error",
+
+            message:
+              error.message,
+
+            icon:
+              "ph-bold ph-warning-circle"
+
+          });
+
+        }
+      }
+    });
+  }
+
+
+  // ------------------------------------------------------------
+  // ESCAPE HTML
+  // ------------------------------------------------------------
+  function escapeHtml(value) {
+
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+
+  // ------------------------------------------------------------
+  // CLOSE MODAL WHEN CLICKING OUTSIDE
+  // ------------------------------------------------------------
+  overlay.addEventListener("click", (event) => {
+
+    if (event.target === overlay) {
+      closeModal();
+    }
+
+  });
+
+
+  // ------------------------------------------------------------
+  // INITIAL LOAD
+  // ------------------------------------------------------------
+  document.addEventListener(
+    "DOMContentLoaded",
+    loadBooks
+  );
+</script>
+</body>
+</html>

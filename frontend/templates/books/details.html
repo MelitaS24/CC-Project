@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Enchanted Forest — Online Library</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../../static/css/style.css" />
+  <link rel="stylesheet" href="../../static/css/books.css" />
+</head>
+<body>
+
+  <!-- ====================================================================
+       TOP NAVIGATION BAR
+       ==================================================================== -->
+  <header class="navbar">
+    <div class="navbar__container">
+      
+      <!-- Logo -->
+      <a href="index.html" class="navbar__logo">
+        <i class="ph ph-books"></i>
+        <span>Online <span class="brand-accent">Library</span></span>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="navbar__nav" id="navbar-nav">
+        <a href="index.html" class="nav-link"><i class="ph-bold ph-house"></i> Home</a>
+        <a href="search.html" class="nav-link"><i class="ph-bold ph-magnifying-glass"></i> Search</a>
+        <a href="../library/my_library.html" class="nav-link"><i class="ph-bold ph-bookmarks"></i> My Library</a>
+        
+        <!-- Auth / Profile Buttons -->
+        <div class="navbar__auth">
+          <a href="../auth/login.html" class="btn btn-secondary">Log In</a>
+          <a href="../auth/register.html" class="btn btn-primary">Sign Up</a>
+        </div>
+      </nav>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button class="navbar__toggle" id="menu-toggle" aria-label="Toggle navigation">
+        <i class="ph-bold ph-list"></i>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- ====================================================================
+       MAIN BOOK DETAILS VIEW
+       ==================================================================== -->
+  <main class="detail-container">
+    
+    <!-- Breadcrumb Trail -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html" class="breadcrumb-item">Home</a>
+      <span class="breadcrumb-separator">/</span>
+      <a href="search.html" class="breadcrumb-item">Catalogue</a>
+      <span class="breadcrumb-separator">/</span>
+      <span class="breadcrumb-current" id="detail-title-crumb">The Enchanted Forest</span>
+    </nav>
+
+    <div class="book-detail">
+      
+      <!-- Left Column: Book Cover & Quick Status -->
+      <div class="book-detail__cover-col">
+        <div class="book-detail__cover-wrapper">
+          <img id="detail-cover" src="https://picsum.photos/seed/book1/400/540" alt="Book Cover" class="book-detail__cover" />
+        </div>
+        <div class="book-detail__availability">
+          <span class="status-indicator status-indicator--available"></span>
+          <span>Available for Instant Reading</span>
+        </div>
+      </div>
+
+      <!-- Right Column: Metadata, Description & Actions -->
+      <div class="book-detail__info-col">
+        
+        <div class="book-detail__header">
+          <span class="badge badge-forest" id="detail-genre" style="background:var(--forest);color:var(--gold);">Fantasy</span>
+          <h1 class="book-detail__title" id="detail-title">The Enchanted Forest</h1>
+          <p class="book-detail__author">By <strong id="detail-author">Elena Brightwood</strong></p>
+        </div>
+
+        <div class="book-detail__meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Pages</span>
+            <span class="meta-val" id="detail-pages"><i class="ph-bold ph-book-open" style="margin-right:0.25rem;"></i> 342 pages</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Published</span>
+            <span class="meta-val" id="detail-year"><i class="ph-bold ph-calendar-blank" style="margin-right:0.25rem;"></i> 2023</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Language</span>
+            <span class="meta-val"><i class="ph-bold ph-translate" style="margin-right:0.25rem;"></i> English</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Rating</span>
+            <span class="meta-val" style="color:var(--gold);"><i class="ph-fill ph-star"></i> 4.8 / 5.0</span>
+          </div>
+        </div>
+
+        <div class="book-detail__section">
+          <h2 class="book-detail__section-heading">Synopsis</h2>
+          <p class="book-detail__description" id="detail-desc">
+            A young cartographer stumbles upon a forest that doesn't appear on any map. Inside, trees whisper secrets of a forgotten kingdom, and every path leads deeper into a world where magic is as natural as breathing. But the forest has a guardian — and she doesn't welcome strangers.
+          </p>
+        </div>
+
+        <div class="book-detail__actions">
+          <button type="button" class="btn btn-primary" onclick="openReader()">
+            <i class="ph-bold ph-book-open"></i>
+            <span>Read Online</span>
+          </button>
+          <button type="button" class="btn btn-outline" onclick="downloadSamplePDF()">
+            <i class="ph-bold ph-download-simple"></i>
+            <span>Download PDF</span>
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="saveToLibrary()">
+            <i class="ph-bold ph-bookmark-simple"></i>
+            <span id="save-btn-text">Save to Library</span>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ====================================================================
+       ONLINE BOOK READER MODAL
+       ==================================================================== -->
+  <div class="reader-modal-overlay" id="reader-overlay">
+    <div class="reader-modal font-md theme-cream" id="reader-modal">
+      
+      <!-- Toolbar -->
+      <div class="reader-toolbar">
+        <div class="reader-toolbar__title">
+          <i class="ph-bold ph-book-open"></i>
+          <span id="reader-book-title">The Enchanted Forest</span>
+        </div>
+
+        <div class="reader-toolbar__controls">
+          <!-- Theme Toggles -->
+          <div style="display:flex;align-items:center;gap:0.35rem;" title="Reading Theme">
+            <button class="reader-theme-btn cream" onclick="setReaderTheme('theme-cream')" title="Cream Theme"></button>
+            <button class="reader-theme-btn sepia" onclick="setReaderTheme('theme-sepia')" title="Sepia Theme"></button>
+            <button class="reader-theme-btn dark" onclick="setReaderTheme('theme-dark')" title="Night Theme"></button>
+          </div>
+
+          <!-- Font Size Adjusters -->
+          <div style="display:flex;align-items:center;gap:0.25rem;">
+            <button class="reader-font-btn" onclick="setReaderFontSize('font-sm')">A-</button>
+            <button class="reader-font-btn" onclick="setReaderFontSize('font-md')">A</button>
+            <button class="reader-font-btn" onclick="setReaderFontSize('font-lg')">A+</button>
+          </div>
+
+          <!-- Close Button -->
+          <button class="reader-close-btn" onclick="closeReader()" aria-label="Close reader">&times;</button>
+        </div>
+      </div>
+
+      <!-- Reader Body -->
+      <div class="reader-body" id="reader-body">
+        <h2 id="reader-heading">Chapter I: The Cartographer's Compass</h2>
+        <div class="reader-chapter-sub" id="reader-sub">by Elena Brightwood</div>
+        <div id="reader-text">
+          <p>
+            The morning mist clung to the ancient silver pines like spider silk, dampening the sound of Clara’s footsteps as she crossed the uncharted boundary of the Whispering Woods. In her leather satchel lay three centuries of kingdom maps, every one of them leaving this exact valley blank, washed in pale parchment ink with the single annotation: <em>Terra Ignota</em>.
+          </p>
+          <p>
+            She lifted her brass compass. Instead of spinning toward the magnetic north, the needle trembled, pointed south toward a towering arch of emerald moss, and then began to turn in slow, deliberate circles—as if keeping time with a heartbeat buried deep under the roots.
+          </p>
+          <p>
+            "You shouldn't be drawing what wants to remain hidden," a voice drifted from the canopy above. Clara reached instinctively for her surveyor’s knife, but all that met her gaze was an iridescent moth the size of a falcon, resting upon a glowing silver branch that hadn't been there a second before.
+          </p>
+          <p>
+            The forest was not a landscape; it was an architecture of living memory. And with every step she took toward the heartwood grove, the path behind her rewrote itself, sealing the exit with roots woven as tight as iron gates.
+          </p>
+        </div>
+      </div>
+
+      <!-- Footer Bar -->
+      <div class="reader-footer">
+        <span id="reader-progress-label">Reading Mode &bull; Chapter 1 of 3</span>
+        <div style="display:flex;gap:0.5rem;">
+          <button class="btn btn-outline" id="reader-prev-btn" onclick="prevChapter()">Previous</button>
+          <button class="btn btn-primary" id="reader-next-btn" onclick="nextChapter()">Next Chapter</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       BASIC FOOTER
+       ==================================================================== -->
+  <footer class="footer">
+    <div class="footer__simple-container">
+      <div class="footer__simple-brand">
+        <i class="ph ph-books"></i>
+        <span>Online <span class="brand-accent">Library</span></span>
+      </div>
+      <p class="footer__copyright">&copy; 2026 Online Library. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../static/js/main.js"></script>
+  <script>
+  let currentBookId = 1;
+  let currentBook = null;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    currentBookId = parseInt(params.get('id')) || 1;
+
+    loadBookDetails();
+
+    document.getElementById('reader-overlay').addEventListener('click', (e) => {
+      if (e.target.id === 'reader-overlay') {
+        closeReader();
+      }
+    });
+  });
+
+
+  async function loadBookDetails() {
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:5001/books/${currentBookId}`
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Book not found');
+      }
+
+      currentBook = data.book;
+
+      document.title = currentBook.title + ' — Online Library';
+
+      document.getElementById('detail-title').textContent =
+        currentBook.title;
+
+      document.getElementById('detail-title-crumb').textContent =
+        currentBook.title;
+
+      document.getElementById('detail-author').textContent =
+        currentBook.author;
+
+      document.getElementById('detail-genre').textContent =
+        currentBook.genre;
+
+      document.getElementById('detail-desc').textContent =
+        currentBook.description || 'No description available.';
+
+      document.getElementById('detail-cover').src =
+        currentBook.cover_url ||
+        'https://picsum.photos/seed/book' + currentBook.id + '/400/540';
+
+      document.getElementById('detail-cover').alt =
+        'Cover of ' + currentBook.title;
+
+    } catch (error) {
+      console.error('Load book error:', error);
+
+      window.showAppToast({
+        title: 'Book Not Found',
+        message: 'Unable to load this book from the backend.',
+        icon: 'ph-bold ph-warning-circle'
+      });
+    }
+  }
+
+
+  async function openReader() {
+  if (!currentBook) {
+    window.showAppToast({
+      title: 'Please Wait',
+      message: 'Book details are still loading.',
+      icon: 'ph-bold ph-info'
+    });
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:5001/books/${currentBook.id}/read`
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'PDF not available');
+    }
+
+    // Open the actual S3 PDF
+    window.open(data.pdf_url, '_blank');
+
+  } catch (error) {
+    console.error('Read book error:', error);
+
+    window.showAppToast({
+      title: 'Unable to Open Book',
+      message: error.message || 'PDF is not available.',
+      icon: 'ph-bold ph-warning-circle'
+    });
+  }
+}
+
+
+  function closeReader() {
+    document.getElementById('reader-overlay').classList.remove('active');
+
+    document.body.style.overflow = '';
+  }
+
+
+  function setReaderTheme(themeClass) {
+    const modal = document.getElementById('reader-modal');
+
+    modal.classList.remove(
+      'theme-cream',
+      'theme-sepia',
+      'theme-dark'
+    );
+
+    modal.classList.add(themeClass);
+  }
+
+
+  function setReaderFontSize(fontClass) {
+    const modal = document.getElementById('reader-modal');
+
+    modal.classList.remove(
+      'font-sm',
+      'font-md',
+      'font-lg'
+    );
+
+    modal.classList.add(fontClass);
+  }
+
+
+  async function downloadSamplePDF() {
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:5001/books/${bookId}/download`
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.message || "Unable to generate download link"
+      );
+    }
+
+    // Open the private S3 presigned URL
+    window.open(data.download_url, "_blank");
+
+  } catch (error) {
+    console.error("Download error:", error);
+
+    window.showAppToast({
+      title: "Download Failed",
+      message: error.message,
+      icon: "ph-bold ph-warning-circle"
+    });
+  }
+}
+
+
+  async function saveToLibrary() {
+    if (!currentBook) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:5001/library/${currentBook.id}`,
+        {
+          method: 'POST',
+          credentials: 'include'
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        window.showAppToast({
+          title: 'Unable to Save',
+          message: data.message || 'Please login first.',
+          icon: 'ph-bold ph-warning-circle'
+        });
+        return;
+      }
+
+      document.getElementById('save-btn-text').textContent =
+        'Saved in My Library ✓';
+
+      window.showAppToast({
+        title: 'Saved to Library',
+        message: `"${currentBook.title}" has been added to your library.`,
+        icon: 'ph-bold ph-bookmarks'
+      });
+
+    } catch (error) {
+      console.error('Save library error:', error);
+
+      window.showAppToast({
+        title: 'Connection Error',
+        message: 'Unable to connect to the backend.',
+        icon: 'ph-bold ph-warning-circle'
+      });
+    }
+  }
+</script>
+</body>
+</html>
