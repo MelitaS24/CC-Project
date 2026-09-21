@@ -29,22 +29,29 @@
     <div class="navbar__container">
       
       <!-- Logo -->
-      <a href="{{ url_for('books.index') }}" class="navbar__logo">
+      <a href="/books" class="navbar__logo">
         <i class="ph ph-books"></i>
         <span>Online <span class="brand-accent">Library</span></span>
       </a>
 
       <!-- Navigation Links -->
       <nav class="navbar__nav" id="navbar-nav">
-        <a href="{{ url_for('books.index') }}" class="nav-link"><i class="ph-bold ph-house"></i> Home</a>
-        <a href="{{ url_for('books.search') }}" class="nav-link"><i class="ph-bold ph-magnifying-glass"></i> Search</a>
-        <a href="{{ url_for('library.my_library') }}" class="nav-link"><i class="ph-bold ph-bookmarks"></i> My Library</a>
-        
-        <!-- Auth / Profile Buttons -->
-        <div class="navbar__auth">
-          <a href="{{ url_for('auth.login') }}" class="btn btn-secondary">Log In</a>
-          <a href="{{ url_for('auth.register') }}" class="btn btn-primary active">Sign Up</a>
-        </div>
+        <a href="/books" class="nav-link">
+  <i class="ph-bold ph-house"></i> Home
+</a>
+
+<a href="/books" class="nav-link">
+  <i class="ph-bold ph-magnifying-glass"></i> Books
+</a>
+
+<a href="/library" class="nav-link">
+  <i class="ph-bold ph-bookmarks"></i> My Library
+</a>
+
+<div class="navbar__auth">
+  <a href="/login" class="btn btn-outline">Log In</a>
+  <a href="/register" class="btn btn-primary active">Sign Up</a>
+</div>
       </nav>
 
       <!-- Mobile Menu Toggle Button -->
@@ -168,7 +175,7 @@
       </form>
 
       <div class="auth-card__footer">
-        <p>Already have an account? <a href="{{ url_for('auth.login') }}" class="auth-link">Log in</a></p>
+        <p>Already have an account? <a href="/login" class="auth-link">Log in</a></p>
       </div>
 
     </div>
@@ -188,43 +195,81 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="../../static/js/main.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   <script>
-    function togglePasswordVisibility(inputId, btn) {
-      const input = document.getElementById(inputId);
-      const icon = btn.querySelector('i');
-      if (input.type === 'password') {
-        input.type = 'text';
-        icon.className = 'ph-bold ph-eye-slash';
-      } else {
-        input.type = 'password';
-        icon.className = 'ph-bold ph-eye';
-      }
-    }
+function togglePasswordVisibility(inputId, btn) {
+  const input = document.getElementById(inputId);
+  const icon = btn.querySelector("i");
 
-    function handleRegister(e) {
-      e.preventDefault();
-      const p1 = document.getElementById('reg-password').value;
-      const p2 = document.getElementById('reg-confirm-password').value;
-      if (p1 !== p2) {
-        window.showAppDialog({
-          title: "Password Mismatch",
-          message: "The passwords you entered do not match. Please verify and try again.",
-          icon: "ph-bold ph-warning-circle",
-          confirmText: "Try Again"
-        });
-        return;
-      }
+  if (input.type === "password") {
+    input.type = "text";
+    icon.className = "ph-bold ph-eye-slash";
+  } else {
+    input.type = "password";
+    icon.className = "ph-bold ph-eye";
+  }
+}
+
+async function handleRegister(e) {
+  e.preventDefault();
+
+  const name = document.getElementById("reg-name").value;
+  const email = document.getElementById("reg-email").value;
+  const password = document.getElementById("reg-password").value;
+  const confirmPassword = document.getElementById("reg-confirm-password").value;
+
+  if (password !== confirmPassword) {
+    window.showAppDialog({
+      title: "Password Mismatch",
+      message: "The passwords do not match.",
+      icon: "ph-bold ph-warning-circle",
+      confirmText: "Try Again"
+    });
+    return;
+  }
+
+  try {
+    const res = await fetch("/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        password
+      })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
       window.showAppDialog({
         title: "Account Created!",
-        message: "Your reader profile is now active. Welcome to Online Library.",
+        message: data.message,
         icon: "ph-bold ph-seal-check",
-        confirmText: "Enter Library",
+        confirmText: "Go to Login",
         onConfirm: () => {
-          window.location = "{{ url_for('books.index') }}";
+          window.location.href = "/login";
         }
       });
+    } else {
+      window.showAppDialog({
+        title: "Registration Failed",
+        message: data.message,
+        icon: "ph-bold ph-warning-circle",
+        confirmText: "Try Again"
+      });
     }
-  </script>
+  } catch (err) {
+    window.showAppDialog({
+      title: "Server Error",
+      message: "Unable to connect to the server.",
+      icon: "ph-bold ph-wifi-slash",
+      confirmText: "OK"
+    });
+  }
+}
+</script>
 </body>
 </html>
